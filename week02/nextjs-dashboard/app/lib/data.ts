@@ -16,12 +16,12 @@ export async function fetchRevenue() {
     // Artificially delay a response for demo purposes.
     // Don't do this in production :)
 
-    // console.log('Fetching revenue data...');
-    // await new Promise((resolve) => setTimeout(resolve, 3000));
+    console.log('Fetching revenue data...');
+    await new Promise((resolve) => setTimeout(resolve, 3000));
 
     const data = await sql<Revenue[]>`SELECT * FROM revenue`;
 
-    // console.log('Data fetch completed after 3 seconds.');
+    console.log('Data fetch completed after 3 seconds.');
 
     return data;
   } catch (error) {
@@ -160,6 +160,7 @@ export async function fetchInvoiceById(id: string) {
       amount: invoice.amount / 100,
     }));
 
+    console.log(invoice);
     return invoice[0];
   } catch (error) {
     console.error('Database Error:', error);
@@ -183,7 +184,55 @@ export async function fetchCustomers() {
     throw new Error('Failed to fetch all customers.');
   }
 }
+/*
+// for fun
+export async function fetchNumberofCustomers() {
+  try{
+    const data = await sql<[]>`SELECT COUNT(*) FROM customers`
 
+    return data[0]["count"];
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch number of customers.');
+  }
+}
+
+export async function fetchNumberofInvoicesPending() {
+  try{
+    const data = await sql<[]>`SELECT SUM(invoices.amount) FROM invoices WHERE invoices.status='pending'`
+
+    console.log(data)
+    return formatCurrency(data[0]["sum"]);
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch number of invoices.');
+  }
+}
+
+// fetchNumberofInvoices, fetchTotalPaidInvoices
+export async function fetchNumberofInvoices() {
+  try{
+    const data = await sql<[]>`SELECT COUNT(*) FROM invoices`
+
+    return data[0]["count"];
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch number of invoices.');
+  }
+}
+
+export async function fetchTotalPaidInvoices() {
+  try{
+    const data = await sql<[]>`SELECT SUM(invoices.amount) FROM invoices WHERE invoices.status='paid'`
+
+    return formatCurrency(data[0]["sum"]);
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch number of invoices.');
+  }
+}
+
+*/
 export async function fetchFilteredCustomers(query: string) {
   try {
     const data = await sql<CustomersTableType[]>`
